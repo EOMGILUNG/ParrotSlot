@@ -245,7 +245,7 @@ button {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 3px;
-  aspect-ratio: 5 / 6.4;
+  aspect-ratio: 5 / 4.6;
   background: var(--reel-gap);
   padding: 3px;
   border-radius: 8px;
@@ -1739,9 +1739,9 @@ button {
 }
 
 @media (min-height: 740px) {
-  .reels { aspect-ratio: 5 / 6.6; }
+  .reels { aspect-ratio: 5 / 4.8; }
 }
 
 @media (min-height: 860px) {
-  .reels { aspect-ratio: 5 / 6.9; }
+  .reels { aspect-ratio: 5 / 5; }
 }
