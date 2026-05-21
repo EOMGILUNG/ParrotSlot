@@ -172,6 +172,9 @@ const els = {
   resetModal: document.getElementById("resetModal"),
   cancelReset: document.getElementById("cancelReset"),
   confirmReset: document.getElementById("confirmReset"),
+  rulesBtn: document.getElementById("rulesBtn"),
+  rulesModal: document.getElementById("rulesModal"),
+  closeRulesBtn: document.getElementById("closeRulesBtn"),
 
   bonusPill: document.getElementById("bonusPill"),
   bonusPillCount: document.getElementById("bonusPillCount"),
@@ -187,7 +190,6 @@ const els = {
   closeFreeSpinsSummary: document.getElementById("closeFreeSpinsSummary"),
 
   playUI: document.getElementById("playUI"),
-  paytable: document.getElementById("paytable"),
   gambleInline: document.getElementById("gambleInline"),
   gambleTitle: document.getElementById("gambleTitle"),
   gambleAmount: document.getElementById("gambleAmount"),
@@ -243,12 +245,6 @@ function showBottomPanel(name) {
     if (!el) return;
     el.classList.toggle("hidden", p !== name);
   });
-  // Paytable stays visible no matter which bottom panel is active —
-  // regular play, Hi-Lo gamble, free-spins intro / summary, free-spins
-  // play. The pay reference is always one glance away.
-  if (els.paytable) {
-    els.paytable.classList.remove("hidden");
-  }
 }
 
 function showGamblePanel() { showBottomPanel("gambleInline"); }
@@ -537,8 +533,8 @@ function clearHighlights() {
   document.querySelectorAll(".cell.win").forEach((c) => c.classList.remove("win"));
   els.paylines.innerHTML = "";
   els.coinLayer.innerHTML = "";
-  if (els.leftBadges) els.leftBadges.innerHTML = "";
-  if (els.rightBadges) els.rightBadges.innerHTML = "";
+  // Keep the persistent 1..20 line tags — only clear the win glow.
+  clearWinningHighlights();
 }
 
 /* ===================== Evaluation ===================== */
@@ -732,7 +728,9 @@ function flashActiveLines(highlightIndex) {
   // Numbered pills OUTSIDE the reels for every active line. Lines 1..10
   // sit in the left column, 11..20 in the right column, each grouped by
   // its starting reel row. Pills never overlap any symbol.
-  placeAllPreviewBadges(state.lines, highlightIndex, reelsRect);
+  // The persistent line tags reflect active/inactive based on state.lines,
+  // so we just toggle them — no more transient preview pills.
+  updateLineBadgeActivity();
 
   hintCleanupTimer = setTimeout(() => {
     els.paylines.querySelectorAll(".payline-hint").forEach((n) => n.remove());
@@ -768,22 +766,28 @@ function showWins(result) {
   // Numbered badges live in the side columns OUTSIDE the reels, so they
   // never cover symbols. Lines 1..10 go to the left column, 11..20 to
   // the right, grouped by their starting row.
-  placeWinBadges(winsToShow, reelsRect);
+  markWinningLines(winsToShow);
 }
 
-function placeWinBadges(wins, reelsRect) {
+// Build all 20 line-number tags once and stick them in the side columns
+// for the whole session. They stay visible all the time; active/inactive
+// state reflects state.lines, and `.won` is added when a line pays.
+function initLineBadges() {
   if (!els.leftBadges || !els.rightBadges) return;
   els.leftBadges.innerHTML = "";
   els.rightBadges.innerHTML = "";
 
+  if (!els.reels || !els.reels.clientHeight) return;
+
+  const reelsRect = els.reels.getBoundingClientRect();
   const slotsPerCol = 10;
   const slotHeight = reelsRect.height / slotsPerCol;
 
-  wins.forEach((win) => {
-    const info = LINE_SLOTS[win.index];
-    if (!info) return;
+  for (let i = 0; i < 20; i += 1) {
+    const info = LINE_SLOTS[i];
+    if (!info) continue;
     const container = info.side === "left" ? els.leftBadges : els.rightBadges;
-    if (!container) return;
+    if (!container) continue;
 
     const wrapper = document.createElement("div");
     wrapper.className = "line-badge-row";
@@ -792,11 +796,40 @@ function placeWinBadges(wins, reelsRect) {
 
     const pill = document.createElement("div");
     pill.className = "line-badge-pill";
-    pill.style.backgroundColor = lineColors[win.index % lineColors.length];
-    pill.textContent = String(win.index + 1);
+    pill.dataset.lineIdx = String(i);
+    pill.style.backgroundColor = lineColors[i % lineColors.length];
+    pill.textContent = String(i + 1);
     wrapper.appendChild(pill);
     container.appendChild(wrapper);
+  }
+
+  updateLineBadgeActivity();
+}
+
+function updateLineBadgeActivity() {
+  document.querySelectorAll(".line-badge-pill[data-line-idx]").forEach((pill) => {
+    const idx = Number(pill.dataset.lineIdx);
+    pill.classList.toggle("active", idx < state.lines);
+    pill.classList.toggle("inactive", idx >= state.lines);
   });
+}
+
+function markWinningLines(wins) {
+  document
+    .querySelectorAll(".line-badge-pill.won")
+    .forEach((p) => p.classList.remove("won"));
+  wins.forEach((win) => {
+    const pill = document.querySelector(
+      `.line-badge-pill[data-line-idx="${win.index}"]`
+    );
+    if (pill) pill.classList.add("won");
+  });
+}
+
+function clearWinningHighlights() {
+  document
+    .querySelectorAll(".line-badge-pill.won")
+    .forEach((p) => p.classList.remove("won"));
 }
 
 function showCoinToast(amount) {
@@ -1310,6 +1343,22 @@ els.resetModal.addEventListener("click", (e) => {
   if (e.target === els.resetModal) closeModal(els.resetModal);
 });
 
+// Rules / paytable modal — toggled from the sub-controls
+if (els.rulesBtn) {
+  els.rulesBtn.addEventListener("click", () => {
+    if (state.spinning) return;
+    openModal(els.rulesModal);
+  });
+}
+if (els.closeRulesBtn) {
+  els.closeRulesBtn.addEventListener("click", () => closeModal(els.rulesModal));
+}
+if (els.rulesModal) {
+  els.rulesModal.addEventListener("click", (e) => {
+    if (e.target === els.rulesModal) closeModal(els.rulesModal);
+  });
+}
+
 // Prevent iOS rubber-band scroll outside modal regions
 document.addEventListener(
   "touchmove",
@@ -1332,6 +1381,9 @@ async function init() {
   await Promise.all(assetPromises);
   seedGrid();
   updateMeters();
+  // Paint the persistent 1..20 line tags once the reels have real
+  // dimensions. They stay visible for the whole session.
+  requestAnimationFrame(() => initLineBadges());
   if (state.lines === 0 && els.message) {
     els.message.textContent = "라인을 1개 이상 선택하세요 (+)";
     els.message.classList.remove("win", "spin");

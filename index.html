@@ -15,8 +15,8 @@
   <body>
     <div class="app">
       <header class="app-header">
-        <span class="brand-mark" aria-hidden="true">🦜</span>
-        <h1 class="brand">Parrot Slot <span class="version-tag">v1.0</span></h1>
+        <span class="brand-mark" id="rulesBtn" role="button" tabindex="0" aria-label="규칙 보기">🦜</span>
+        <h1 class="brand">Parrot Slot <span class="version-tag">v1.2</span></h1>
         <button class="header-btn active" id="soundBtn" aria-label="Sound toggle">♪</button>
       </header>
 
@@ -49,31 +49,6 @@
           🦋 FREE SPIN <span id="bonusPillCount">0/0</span> &nbsp;×<span id="bonusPillMulti">3</span>
         </div>
       </section>
-
-      <!-- Compact paytable / score reference -->
-      <div class="paytable" id="paytable" aria-label="pay table">
-        <div class="paytable-header">
-          PAY TABLE
-          <span class="paytable-sub">5 · 4 · 3 · 2 매치 (×1)</span>
-        </div>
-        <div class="paytable-cols">
-          <div class="paytable-col">
-            <div class="pt-row"><span class="pt-sym">🐆</span><span class="pt-pays">250·150·50·5</span></div>
-            <div class="pt-row"><span class="pt-sym">💃</span><span class="pt-pays">200·100·40·3</span></div>
-            <div class="pt-row"><span class="pt-sym">🐊</span><span class="pt-pays">150·75·30·2</span></div>
-            <div class="pt-row"><span class="pt-sym">🦋</span><span class="pt-pays">100·50·20·2</span></div>
-            <div class="pt-row"><span class="pt-sym sym-k">K</span><span class="pt-pays">80·40·15</span></div>
-            <div class="pt-row"><span class="pt-sym sym-q">Q</span><span class="pt-pays">75·30·10</span></div>
-          </div>
-          <div class="paytable-col">
-            <div class="pt-row"><span class="pt-sym sym-j">J</span><span class="pt-pays">60·20·5</span></div>
-            <div class="pt-row"><span class="pt-sym sym-ten">10</span><span class="pt-pays">50·20·5</span></div>
-            <div class="pt-row"><span class="pt-sym sym-nine">9</span><span class="pt-pays">50·10·5</span></div>
-            <div class="pt-row"><span class="pt-sym">🐟</span><span class="pt-pays">50·10·2 <em>×베팅</em></span></div>
-            <div class="pt-row"><span class="pt-sym">🦜</span><span class="pt-pays">와일드 · 릴 2~5</span></div>
-          </div>
-        </div>
-      </div>
 
       <!-- Normal play controls (hidden during gamble) -->
       <div class="play-ui" id="playUI">
@@ -154,6 +129,35 @@
         <h2 class="bonus-title">BONUS WIN</h2>
         <div class="bonus-amount" id="bonusTotalWin">+0</div>
         <button class="modal-btn confirm" id="closeFreeSpinsSummary">확인</button>
+      </div>
+    </div>
+
+    <!-- Pay-table rules modal -->
+    <div class="modal hidden" id="rulesModal" aria-hidden="true">
+      <div class="modal-card rules-card">
+        <h2 class="rules-title">PAY TABLE</h2>
+        <p class="rules-sub">5 · 4 · 3 · 2 매치 (×1 멀티)</p>
+        <div class="paytable-cols">
+          <div class="paytable-col">
+            <div class="pt-row"><span class="pt-sym">🐆</span><span class="pt-pays">250·150·50·5</span></div>
+            <div class="pt-row"><span class="pt-sym">💃</span><span class="pt-pays">200·100·40·3</span></div>
+            <div class="pt-row"><span class="pt-sym">🐊</span><span class="pt-pays">150·75·30·2</span></div>
+            <div class="pt-row"><span class="pt-sym">🦋</span><span class="pt-pays">100·50·20·2</span></div>
+            <div class="pt-row"><span class="pt-sym sym-k">K</span><span class="pt-pays">80·40·15</span></div>
+            <div class="pt-row"><span class="pt-sym sym-q">Q</span><span class="pt-pays">75·30·10</span></div>
+          </div>
+          <div class="paytable-col">
+            <div class="pt-row"><span class="pt-sym sym-j">J</span><span class="pt-pays">60·20·5</span></div>
+            <div class="pt-row"><span class="pt-sym sym-ten">10</span><span class="pt-pays">50·20·5</span></div>
+            <div class="pt-row"><span class="pt-sym sym-nine">9</span><span class="pt-pays">50·10·5</span></div>
+            <div class="pt-row"><span class="pt-sym">🐟</span><span class="pt-pays">50·10·2 <em>×베팅</em></span></div>
+            <div class="pt-row"><span class="pt-sym">🦜</span><span class="pt-pays">와일드 · 릴 2~5</span></div>
+          </div>
+        </div>
+        <p class="rules-foot">
+          🦋 3마리 이상 → 프리스핀 보너스 · 점수 후 Hi-Lo 도전 가능
+        </p>
+        <button class="modal-btn confirm" id="closeRulesBtn">닫기</button>
       </div>
     </div>
 
