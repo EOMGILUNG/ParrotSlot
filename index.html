@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#14062c" />
+    <title>Parrot Slot</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <span class="brand-mark" aria-hidden="true">🦜</span>
+        <h1 class="brand">Parrot Slot</h1>
+        <button class="header-btn active" id="soundBtn" aria-label="Sound toggle">♪</button>
+      </header>
+
+      <section class="stats" aria-label="game stats">
+        <div class="stat stat-credit">
+          <span class="stat-label">CREDIT</span>
+          <strong class="stat-value" id="credit">500</strong>
+        </div>
+        <div class="stat stat-bet">
+          <span class="stat-label">LINES</span>
+          <strong class="stat-value" id="bet">20</strong>
+        </div>
+        <div class="stat stat-win">
+          <span class="stat-label">WIN</span>
+          <strong class="stat-value" id="win">0</strong>
+        </div>
+      </section>
+
+      <section class="board" aria-label="reels">
+        <div class="board-row">
+          <div class="line-badges-col" id="leftBadges" aria-hidden="true"></div>
+          <div class="reels-wrap">
+            <div class="reels" id="reels"></div>
+            <svg class="payline-layer" id="paylines" preserveAspectRatio="none"></svg>
+            <div class="coin-layer" id="coinLayer" aria-hidden="true"></div>
+          </div>
+          <div class="line-badges-col" id="rightBadges" aria-hidden="true"></div>
+        </div>
+        <div class="bonus-pill hidden" id="bonusPill" aria-live="polite">
+          🦋 FREE SPIN <span id="bonusPillCount">0/0</span> &nbsp;×<span id="bonusPillMulti">3</span>
+        </div>
+      </section>
+
+      <!-- Compact paytable / score reference -->
+      <div class="paytable" id="paytable" aria-label="pay table">
+        <div class="paytable-header">
+          PAY TABLE
+          <span class="paytable-sub">5 · 4 · 3 · 2 매치 (×1)</span>
+        </div>
+        <div class="paytable-cols">
+          <div class="paytable-col">
+            <div class="pt-row"><span class="pt-sym">🐆</span><span class="pt-pays">250·150·50·5</span></div>
+            <div class="pt-row"><span class="pt-sym">💃</span><span class="pt-pays">200·100·40·3</span></div>
+            <div class="pt-row"><span class="pt-sym">🐊</span><span class="pt-pays">150·75·30·2</span></div>
+            <div class="pt-row"><span class="pt-sym">🦋</span><span class="pt-pays">100·50·20·2</span></div>
+            <div class="pt-row"><span class="pt-sym sym-k">K</span><span class="pt-pays">80·40·15</span></div>
+            <div class="pt-row"><span class="pt-sym sym-q">Q</span><span class="pt-pays">75·30·10</span></div>
+          </div>
+          <div class="paytable-col">
+            <div class="pt-row"><span class="pt-sym sym-j">J</span><span class="pt-pays">60·20·5</span></div>
+            <div class="pt-row"><span class="pt-sym sym-ten">10</span><span class="pt-pays">50·20·5</span></div>
+            <div class="pt-row"><span class="pt-sym sym-nine">9</span><span class="pt-pays">50·10·5</span></div>
+            <div class="pt-row"><span class="pt-sym">🐟</span><span class="pt-pays">50·10·2 <em>×베팅</em></span></div>
+            <div class="pt-row"><span class="pt-sym">🦜</span><span class="pt-pays">와일드 · 릴 2~5</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Normal play controls (hidden during gamble) -->
+      <div class="play-ui" id="playUI">
+        <div class="message" id="message">GOOD LUCK!</div>
+
+        <section class="controls" aria-label="spin controls">
+          <button class="bet-btn" id="betDown" aria-label="Lines down">−</button>
+          <button class="spin-btn" id="spinBtn">
+            <span class="spin-text">SPIN</span>
+          </button>
+          <button class="bet-btn" id="betUp" aria-label="Lines up">+</button>
+        </section>
+
+        <section class="sub-controls">
+          <button class="sub-btn" id="autoBtn">AUTO</button>
+          <button class="sub-btn" id="linesResetBtn">LINES 0</button>
+          <button class="sub-btn" id="restartBtn">RESTART</button>
+        </section>
+      </div>
+
+      <!-- Inline Hi-Lo gamble panel (replaces play-ui while gambling) -->
+      <div class="gamble-inline hidden" id="gambleInline">
+        <div class="gamble-head">
+          <span class="gamble-title-inline" id="gambleTitle">상금을 2배로?</span>
+          <span class="gamble-amount-inline">
+            상금 <strong id="gambleAmount">45</strong>
+          </span>
+        </div>
+
+        <div class="hilo-pair">
+          <div class="hilo-slot">
+            <span class="hilo-slot-label">현재</span>
+            <div class="hilo-card" id="hiloPrevCard">
+              <span class="hilo-rank" id="hiloPrevRank">7</span>
+              <span class="hilo-suit" id="hiloPrevSuit">♥</span>
+            </div>
+          </div>
+          <span class="hilo-arrow">→</span>
+          <div class="hilo-slot">
+            <span class="hilo-slot-label">다음</span>
+            <div class="hilo-card back" id="hiloNextCard">
+              <span class="hilo-rank" id="hiloNextRank">?</span>
+              <span class="hilo-suit" id="hiloNextSuit"></span>
+            </div>
+          </div>
+        </div>
+
+        <p class="hilo-rules">LOW 1~6&nbsp;&nbsp;·&nbsp;&nbsp;7 EVEN&nbsp;&nbsp;·&nbsp;&nbsp;HIGH 8~13</p>
+        <p class="hilo-hint" id="hiloHint">맞히면 2배! 다시 도전 가능</p>
+
+        <div class="hilo-choices hidden" id="hiloChoices">
+          <button class="hilo-btn lower" id="hiloLower">
+            <span class="arr">↓</span> LOW 1~6
+          </button>
+          <button class="hilo-btn higher" id="hiloHigher">
+            HIGH 8~13 <span class="arr">↑</span>
+          </button>
+        </div>
+
+        <div class="gamble-actions-inline" id="gambleActions">
+          <button class="modal-btn cancel" id="takeWinBtn">받기</button>
+          <button class="modal-btn confirm" id="startGambleBtn">도전</button>
+        </div>
+      </div>
+
+      <!-- Inline Free Spins intro panel -->
+      <div class="bonus-inline hidden" id="freeSpinsModal">
+        <div class="bonus-butterflies">🦋🦋🦋</div>
+        <h2 class="bonus-title">FREE SPINS</h2>
+        <div class="bonus-count" id="freeSpinsModalCount">5</div>
+        <p class="bonus-multi">×<span id="freeSpinsModalMulti">3</span> 배수 보너스</p>
+        <button class="modal-btn confirm" id="startFreeSpinsBtn">시작하기</button>
+      </div>
+
+      <!-- Inline Free Spins summary panel -->
+      <div class="bonus-inline hidden" id="freeSpinsSummary">
+        <div class="bonus-butterflies">🦋</div>
+        <h2 class="bonus-title">BONUS WIN</h2>
+        <div class="bonus-amount" id="bonusTotalWin">+0</div>
+        <button class="modal-btn confirm" id="closeFreeSpinsSummary">확인</button>
+      </div>
+    </div>
+
+    <!-- Restart confirmation modal (only true overlay left) -->
+    <div class="modal hidden" id="resetModal" aria-hidden="true">
+      <div class="modal-card">
+        <h2>크레딧을 초기화할까요?</h2>
+        <p>현재 잔액이 지워지고 <strong>500</strong> 부터 다시 시작합니다.</p>
+        <div class="modal-actions">
+          <button class="modal-btn cancel" id="cancelReset">취소</button>
+          <button class="modal-btn confirm" id="confirmReset">초기화</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
