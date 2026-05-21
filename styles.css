@@ -150,8 +150,8 @@ button {
   grid-template-columns: 1fr 1fr 1fr;
   background: linear-gradient(180deg, var(--gold-1) 0%, var(--gold-2) 45%, var(--gold-3) 100%);
   border: 2px solid var(--gold-3);
-  border-radius: 18px;
-  padding: 12px 10px;
+  border-radius: 16px;
+  padding: 7px 10px;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.6),
     inset 0 -2px 0 rgba(0, 0, 0, 0.15),
@@ -181,15 +181,15 @@ button {
 }
 
 .stat-label {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 900;
-  letter-spacing: 1.6px;
+  letter-spacing: 1.4px;
   color: #6b3010;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .stat-value {
-  font-size: 22px;
+  font-size: 17px;
   font-weight: 900;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
@@ -220,7 +220,7 @@ button {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 3px;
-  aspect-ratio: 5 / 3.4;
+  aspect-ratio: 5 / 4;
   background: var(--reel-gap);
   padding: 3px;
   border-radius: 8px;
@@ -1547,12 +1547,12 @@ button {
 /* ========================= COMPACT SCREENS ========================= */
 
 @media (max-height: 720px) {
-  .stat-value { font-size: 19px; }
+  .stat-value { font-size: 14px; }
   .spin-btn { width: 88px; height: 88px; font-size: 17px; }
   .bet-btn { width: 50px; height: 50px; font-size: 26px; }
   .message { font-size: 13px; min-height: 40px; padding: 10px; }
   .app { gap: 10px; }
-  .reels { aspect-ratio: 5 / 3.2; }
+  .reels { aspect-ratio: 5 / 3.4; }
   .symbol { font-size: clamp(30px, 9.5vw, 44px); }
   .symbol.card .symbol-fallback { font-size: clamp(34px, 10vw, 46px); }
   .sym-ten .symbol-fallback { font-size: clamp(26px, 8vw, 38px); }
@@ -1574,5 +1574,5 @@ button {
 }
 
 @media (min-height: 820px) {
-  .reels { aspect-ratio: 5 / 3.6; }
+  .reels { aspect-ratio: 5 / 4.2; }
 }
