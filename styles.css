@@ -118,6 +118,23 @@ button {
     0 5px 8px rgba(0, 0, 0, 0.5);
 }
 
+/* Small version chip next to the brand for QA / testing convenience */
+.version-tag {
+  display: inline-block;
+  font-family: ui-monospace, "SF Mono", "Menlo", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.28);
+  padding: 1px 6px;
+  border-radius: 5px;
+  vertical-align: middle;
+  margin-left: 6px;
+  text-shadow: none;
+  border: 1px solid rgba(248, 200, 66, 0.35);
+}
+
 .header-btn {
   width: 36px;
   height: 36px;
