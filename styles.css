@@ -247,7 +247,7 @@ button {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 3px;
-  aspect-ratio: 5 / 3.8;
+  aspect-ratio: 5 / 4.2;
   background: var(--reel-gap);
   padding: 3px;
   border-radius: 8px;
@@ -720,7 +720,7 @@ button {
 .play-ui {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   margin-top: auto;
   flex-shrink: 0;
 }
@@ -730,14 +730,14 @@ button {
 .message {
   background: linear-gradient(180deg, rgba(74, 32, 144, 0.92), rgba(42, 18, 85, 0.92));
   border: 1px solid rgba(248, 200, 66, 0.4);
-  border-radius: 10px;
-  padding: 8px 10px;
+  border-radius: 8px;
+  padding: 5px 8px;
   text-align: center;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.2px;
   color: var(--gold-1);
-  min-height: 34px;
+  min-height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -762,13 +762,13 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 14px;
   padding: 0;
 }
 
 .bet-btn {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   border: 2px solid var(--gold-3);
   background:
@@ -803,8 +803,8 @@ button {
 }
 
 .spin-btn {
-  width: 72px;
-  height: 72px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   border: 2px solid var(--gold-2);
   background:
@@ -812,9 +812,9 @@ button {
     linear-gradient(135deg, #e84020 0%, #a01818 100%);
   color: #fff8d8;
   font-family: "Impact", "Arial Black", sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 900;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -886,15 +886,15 @@ button {
 .sub-btn {
   flex: 1 1 0;
   min-width: 0;
-  max-width: 110px;
-  height: 30px;
-  border-radius: 15px;
+  max-width: 100px;
+  height: 24px;
+  border-radius: 12px;
   border: 1px solid rgba(248, 200, 66, 0.4);
   background: rgba(74, 32, 144, 0.5);
   color: var(--gold-1);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
   transition: background 0.2s, color 0.2s, transform 0.1s;
   backdrop-filter: blur(6px);
 }
@@ -1720,12 +1720,12 @@ button {
 /* ========================= COMPACT SCREENS ========================= */
 
 @media (max-height: 720px) {
-  .stat-value { font-size: 14px; }
-  .spin-btn { width: 88px; height: 88px; font-size: 17px; }
-  .bet-btn { width: 50px; height: 50px; font-size: 26px; }
-  .message { font-size: 13px; min-height: 40px; padding: 10px; }
-  .app { gap: 10px; }
-  .reels { aspect-ratio: 5 / 3.4; }
+  .stat-value { font-size: 13px; }
+  .spin-btn { width: 52px; height: 52px; font-size: 11px; letter-spacing: 1px; }
+  .bet-btn { width: 34px; height: 34px; font-size: 20px; }
+  .message { font-size: 10px; min-height: 22px; padding: 4px 8px; }
+  .app { gap: 6px; }
+  .reels { aspect-ratio: 5 / 3.6; }
   .symbol { font-size: clamp(30px, 9.5vw, 44px); }
   .symbol.card .symbol-fallback { font-size: clamp(34px, 10vw, 46px); }
   .sym-ten .symbol-fallback { font-size: clamp(26px, 8vw, 38px); }
@@ -1740,18 +1740,20 @@ button {
   .pt-row { min-height: 15px; gap: 6px; }
   .pt-sym { font-size: 13px; width: 22px; }
   .pt-pays { font-size: 10px; }
+  .sub-btn { height: 22px; font-size: 9px; }
+  .play-ui { gap: 6px; }
 }
 
 /* Never auto-hide the paytable — the user wants it always visible. */
 
 @media (min-height: 740px) {
-  .reels { aspect-ratio: 5 / 4.2; }
-}
-
-@media (min-height: 860px) {
   .reels { aspect-ratio: 5 / 4.6; }
 }
 
-@media (min-height: 920px) {
+@media (min-height: 860px) {
   .reels { aspect-ratio: 5 / 5; }
+}
+
+@media (min-height: 920px) {
+  .reels { aspect-ratio: 5 / 5.3; }
 }
