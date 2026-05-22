@@ -415,10 +415,10 @@ function startReelSpin(reelEl, col, finalColumn) {
       stopped = true;
       if (rafId) cancelAnimationFrame(rafId);
 
-      // Later reels still travel a bit farther for sequential feel,
-      // but distances are tighter so STOP responds quickly.
-      const cellsAheadByCol = [2, 3, 4, 5, 7];
-      const cellsAhead = cellsAheadByCol[col] ?? 4;
+      // Longer travel distances give the deceleration more visible weight
+      // before the final overshoot-and-bounce settles the symbols.
+      const cellsAheadByCol = [4, 5, 6, 7, 9];
+      const cellsAhead = cellsAheadByCol[col] ?? 6;
       const currentCellIdx = Math.ceil(currentOffset / step);
       const stopCellIdx = currentCellIdx + cellsAhead;
       const finalOffset = stopCellIdx * step;
@@ -440,16 +440,35 @@ function startReelSpin(reelEl, col, finalColumn) {
       void strip.offsetWidth;
 
       // Match initial transition velocity to the reel's CURRENT (already
-      // partially slowed) speed — no acceleration, no jolt.
+      // partially slowed) speed, then stretch the total a bit so the
+      // landing feels heavier instead of clipped short.
       const velocityPxPerSec = currentSpeedPxPerFrame * 60;
       const distance = finalOffset - currentOffset;
-      const duration = (2 * distance) / velocityPxPerSec * 1000;
+      const baseDuration = (2 * distance) / velocityPxPerSec * 1000;
+      const totalDuration = Math.max(baseDuration * 1.35, 750);
 
+      // Two-stage settle: overshoot just past the target row, then
+      // spring back. That tiny rebound is what makes a physical slot
+      // feel like it has weight when it stops.
+      const overshootDistance = step * 0.28;
+      const stage1Duration = totalDuration * 0.78;
+      const stage2Duration = totalDuration * 0.22;
+
+      // Stage 1 — decelerate past the target row.
       strip.style.transition =
-        `transform ${duration}ms cubic-bezier(0.2, 0.4, 0.4, 1)`;
-      strip.style.transform = `translateY(-${finalOffset}px)`;
+        `transform ${stage1Duration}ms cubic-bezier(0.16, 0.72, 0.32, 1)`;
+      strip.style.transform =
+        `translateY(-${finalOffset + overshootDistance}px)`;
 
-      setTimeout(resolve, duration + 40);
+      // Stage 2 — bounce back so the predetermined cells settle exactly
+      // on their lines.
+      setTimeout(() => {
+        strip.style.transition =
+          `transform ${stage2Duration}ms cubic-bezier(0.34, 0.05, 0.4, 1)`;
+        strip.style.transform = `translateY(-${finalOffset}px)`;
+      }, stage1Duration);
+
+      setTimeout(resolve, totalDuration + 40);
     });
   };
 }
