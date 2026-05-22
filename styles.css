@@ -1749,13 +1749,13 @@ button {
 /* Never auto-hide the paytable — the user wants it always visible. */
 
 @media (min-height: 740px) {
-  .reels { aspect-ratio: 5 / 4.6; }
+  .reels { aspect-ratio: 5 / 4.4; }
 }
 
 @media (min-height: 860px) {
-  .reels { aspect-ratio: 5 / 5; }
+  .reels { aspect-ratio: 5 / 4.4; }
 }
 
 @media (min-height: 920px) {
-  .reels { aspect-ratio: 5 / 5.3; }
+  .reels { aspect-ratio: 5 / 4.5; }
 }
